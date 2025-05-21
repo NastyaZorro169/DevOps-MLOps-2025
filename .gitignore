@@ -1,0 +1,15 @@
+# Локальные каталоги Terraform
+.terraform/
+
+# Файлы состояния Terraform
+*.tfstate
+*.tfstate.backup
+
+# Персональные переменные
+*.tfvars
+
+# Ключи и секреты
+*.json
+
+# Файл блокировки (опционально)
+.terraform.lock.hcl
