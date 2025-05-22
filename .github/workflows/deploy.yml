@@ -20,9 +20,10 @@ jobs:
           cd mlflow
           docker compose up -d --build
 
-      - name: Wait for app to be ready (optional)
+      - name: Timeout
         run: sleep 20
 
-      - name: Test Flask app availability
+      - name: Test Flask app and MLflow
         run: |
           curl --fail http://localhost:5000 || exit 1
+          curl --fail http://localhost:5500 || exit 1
