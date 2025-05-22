@@ -1,8 +1,4 @@
-"""
-Simple app to upload an image via a web form 
-and view the inference results on the image in the browser,
-with MLflow integration for model management and logging.
-"""
+
 import argparse
 import io
 import datetime
@@ -35,13 +31,11 @@ def predict():
 
         with mlflow.start_run():
             start_time = time.time()
-
-            # Предсказание с использованием загруженной модели MLflow
-            results = model([img]) # если модель pyfunc, иначе model([img])
-
+            results = model([img]) 
             inference_time = time.time() - start_time
-
-            # Логируем параметры и метрики
+            detections = results.xyxy[0]
+            detected = int(len(detections) > 0)
+            mlflow.log_metric("detected_objects", detected)
             mlflow.log_param("image_size", img.size)
             mlflow.log_metric("inference_time", inference_time)
 
@@ -50,13 +44,10 @@ def predict():
                 class_index = int(results.xyxy[0][i][5])
                 results.names[class_index] = class_names.get(results.names[class_index], results.names[class_index])
 
-            results.render()  # обновляет results.ims с нарисованными рамками и метками
-
+            results.render()
             now_time = datetime.datetime.now().strftime(DATETIME_FORMAT)
             img_savename = f"static/{now_time}.png"
             Image.fromarray(results.ims[0]).save(img_savename)
-
-            # Логируем артефакт — изображение с результатом
             mlflow.log_artifact(img_savename)
 
         return redirect(img_savename)
