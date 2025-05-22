@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  mlflow-server:
+    build:
+      context: ./mlflow-server
+    ports:
+      - "5500:5500"
+    volumes:
+      - ./mlruns:/mlruns
+
+  flask-app:
+    build:
+      context: .
+    ports:
+      - "5000:5000"
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow-server:5500
+    depends_on:
+      - mlflow-server

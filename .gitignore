@@ -13,3 +13,10 @@
 
 # Файл блокировки (опционально)
 .terraform.lock.hcl
+
+venv/
+.vscode
+*.pt
+*.pyc
+static/*.png
+
