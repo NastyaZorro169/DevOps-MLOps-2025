@@ -18,7 +18,7 @@ jobs:
       - name: Build and start containers with docker-compose
         run: |
           cd mlflow
-          docker-compose up -d --build
+          docker compose up -d --build
 
       - name: Wait for app to be ready (optional)
         run: sleep 20
