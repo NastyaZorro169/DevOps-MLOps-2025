@@ -1,0 +1,28 @@
+name: Deploy MLflow and Flask app
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build and start containers with docker-compose
+        run: |
+          cd mlflow
+          docker-compose up -d --build
+
+      - name: Wait for app to be ready (optional)
+        run: sleep 20
+
+      - name: Test Flask app availability
+        run: |
+          curl --fail http://localhost:5000 || exit 1
